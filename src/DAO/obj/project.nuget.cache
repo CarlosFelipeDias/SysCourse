@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "G2Ss2X2eCAo=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\carlo\\OneDrive\\Documentos\\Estudo_cursos\\C#\\project_vs_code\\SysCourse\\src\\DAO\\DAO.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\carlo\\.nuget\\packages\\dapper\\2.1.72\\dapper.2.1.72.nupkg.sha512",
+    "C:\\Users\\carlo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\carlo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\carlo\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
