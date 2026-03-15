@@ -1,0 +1,11 @@
+Server=localhost;Port=3306;Uid=root;Pwd=C@rlos87;
+
+
+$env:ConnectionStrings__DefaultConnection="Server=localhost;Port=3306;Uid=root;Pwd=C@rlos87;"
+
+
+[System.Environment]::SetEnvironmentVariable(
+  "ConnectionStrings__DefaultConnection",
+  "Server=localhost;Port=3306;Uid=root;Pwd=C@rlos87;",
+  "User"
+)

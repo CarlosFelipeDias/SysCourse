@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.Models;
+using DAO;
+using DTO;
 
 namespace WebUI.Controllers
 {
     //[Route("[controller]")]
     public class ContactController : Controller
     {
-
         public IActionResult Create()
         {
             return View();
@@ -22,6 +23,15 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult Create(Contact contact)
         {
+            var contactDTO = new ContactDTO
+            {
+                Name = contact.Name,
+                Surname = contact.Surname,
+                Email = contact.Email
+            };
+
+            var contactDAO = new ContactDAO();
+            contactDAO.CreateContact(contactDTO);
 
             return View();
         }
@@ -41,7 +51,6 @@ namespace WebUI.Controllers
 
         public IActionResult Index()
         {
-
             return View(lstContact);
         }
 
