@@ -1,6 +1,4 @@
-@model IEnumerable<WebUI.Models.Contact>
-
-<a asp-controller="Contact" asp-action="Create" class="btn btn-primary mb-3">Create New Contact</a>
+@model IEnumerable<WebUI.Models.ContactViewModel>
 
 <table class="table">
     <thead>
@@ -27,3 +25,5 @@
         }
     </tbody>
 </table>
+
+<a asp-controller="Contact" asp-action="Create" class="btn btn-outline-success mt-2 fw-bold">Create New Contact</a>

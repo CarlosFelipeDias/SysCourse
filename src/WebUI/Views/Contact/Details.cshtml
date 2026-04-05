@@ -1,24 +1,21 @@
-@model WebUI.Models.Contact
+@model WebUI.Models.ContactViewModel
 
-<form asp-action="Create">
+<div>
 
     <div class="form-group">
         <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control" readonly />
     </div>
 
     <div class="form-group">
         <label asp-for="Surname"></label>
-        <input asp-for="Surname" class="form-control" />
+        <input asp-for="Surname" class="form-control" readonly />
     </div>
 
     <div class="form-group">
         <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
+        <input asp-for="Email" class="form-control" readonly />
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        Send
-    </button>
-
-</form>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</div>

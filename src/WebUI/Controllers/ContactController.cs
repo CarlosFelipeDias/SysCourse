@@ -15,25 +15,46 @@ namespace WebUI.Controllers
     //[Route("[controller]")]
     public class ContactController : Controller
     {
-        public IActionResult Create()
+        private readonly ContactDAO _contactDAO;
+
+        private static ContactViewModel ToModel(ContactDTO contactDTO)
         {
-            return View();
+            return new ContactViewModel
+            {
+                Id = contactDTO.Id,
+                Name = contactDTO.Name,
+                Surname = contactDTO.Surname,
+                Email = contactDTO.Email
+            };
         }
 
-        [HttpPost]
-        public IActionResult Create(Contact contact)
+        private static ContactDTO ToDto(ContactViewModel contact)
         {
-            var contactDTO = new ContactDTO
+            return new ContactDTO
             {
+                Id = contact.Id,
                 Name = contact.Name,
                 Surname = contact.Surname,
                 Email = contact.Email
             };
+        }
 
-            var contactDAO = new ContactDAO();
-            contactDAO.CreateContact(contactDTO);
+        public IActionResult Create()
+        {
+                      return View();
+        }
 
-            return View();
+        [HttpPost]
+        public IActionResult Create(ContactViewModel contact)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+
+            _contactDAO.CreateContact(ToDto(contact));
+
+            return RedirectToAction(nameof(Index));
         }
         // private readonly ILogger<ContactController> _logger;
 
@@ -41,25 +62,78 @@ namespace WebUI.Controllers
         // {
         //     _logger = logger;
         // }
-        List<Contact> lstContact = new List<Contact>();
-
         public ContactController()
         {
-            lstContact.Add(new Contact() { Id = 1, Name = "Maria", Surname = "Joaquina", Email = "mariajoaquina@hotmail.com" });
-            lstContact.Add(new Contact() { Id = 2, Name = "Lucio", Surname = "Flavio", Email = "lucioflavio@gmail.com" });
+            _contactDAO = new ContactDAO();
         }
 
         public IActionResult Index()
         {
+            var lstContactDTO = _contactDAO.GetAllContacts();
+            var lstContact = new List<ContactViewModel>();
+            foreach (var contactDTO in lstContactDTO)
+            {
+                lstContact.Add(ToModel(contactDTO));
+            }
+
             return View(lstContact);
         }
 
         public IActionResult Details(int id)
         {
+            var contactDTO = _contactDAO.GetContactById(id);
+            if (contactDTO is null)
+            {
+                return NotFound();
+            }
 
-            //var contact = lstContact.FirstOrDefault(c => c.Id == id);
-            var contact = lstContact.Find(c => c.Id == id);
+            var contact = ToModel(contactDTO);
+
             return View(contact);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            
+            var contactDTO = _contactDAO.GetContactById(id);
+            if (contactDTO is null)
+            {
+                return NotFound();
+            }
+
+            return View(ToModel(contactDTO));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ContactViewModel contact)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+
+            _contactDAO.UpdateContact(ToDto(contact));
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var contactDTO = _contactDAO.GetContactById(id);
+            if (contactDTO is null)
+            {
+                return NotFound();
+            }
+
+            return View(ToModel(contactDTO));
+        }
+
+        [HttpPost]
+        public IActionResult Delete(ContactViewModel contact)
+        {
+            _contactDAO.DeleteContact(contact.Id);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
