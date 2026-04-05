@@ -1,9 +1,21 @@
+using AutoMapper;
 using DAO;
+using DTO;
+using Microsoft.Extensions.Logging.Abstractions;
+using WebUI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.CreateMap<ContactDTO, ContactViewModel>().ReverseMap();
+}, NullLoggerFactory.Instance);
+
+IMapper mapper = config.CreateMapper();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddTransient<IContactDAO, ContactDAO>();
 
 var app = builder.Build();

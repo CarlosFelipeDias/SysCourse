@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WebUI.Models;
 using DAO;
 using DTO;
@@ -16,28 +11,7 @@ namespace WebUI.Controllers
     public class ContactController : Controller
     {
         private readonly IContactDAO _contactDAO;
-
-        private static ContactViewModel ToModel(ContactDTO contactDTO)
-        {
-            return new ContactViewModel
-            {
-                Id = contactDTO.Id,
-                Name = contactDTO.Name,
-                Surname = contactDTO.Surname,
-                Email = contactDTO.Email
-            };
-        }
-
-        private static ContactDTO ToDto(ContactViewModel contact)
-        {
-            return new ContactDTO
-            {
-                Id = contact.Id,
-                Name = contact.Name,
-                Surname = contact.Surname,
-                Email = contact.Email
-            };
-        }
+        private readonly IMapper _mapper;
 
         public IActionResult Create()
         {
@@ -52,7 +26,8 @@ namespace WebUI.Controllers
                 return View(contact);
             }
 
-            _contactDAO.CreateContact(ToDto(contact));
+            var contactDTO = _mapper.Map<ContactDTO>(contact);
+            _contactDAO.CreateContact(contactDTO);
 
             return RedirectToAction(nameof(Index));
         }
@@ -64,19 +39,16 @@ namespace WebUI.Controllers
         // }
        
         
-        public ContactController(IContactDAO contactDAO)
+        public ContactController(IContactDAO contactDAO, IMapper mapper)
         {
             _contactDAO = contactDAO;
+            _mapper = mapper;
         }
     
         public IActionResult Index()
         {
             var lstContactDTO = _contactDAO.GetAllContacts();
-            var lstContact = new List<ContactViewModel>();
-            foreach (var contactDTO in lstContactDTO)
-            {
-                lstContact.Add(ToModel(contactDTO));
-            }
+            var lstContact = _mapper.Map<List<ContactViewModel>>(lstContactDTO);
 
             return View(lstContact);
         }
@@ -89,7 +61,7 @@ namespace WebUI.Controllers
                 return NotFound();
             }
 
-            var contact = ToModel(contactDTO);
+            var contact = _mapper.Map<ContactViewModel>(contactDTO);
 
             return View(contact);
         }
@@ -103,7 +75,7 @@ namespace WebUI.Controllers
                 return NotFound();
             }
 
-            return View(ToModel(contactDTO));
+            return View(_mapper.Map<ContactViewModel>(contactDTO));
         }
 
         [HttpPost]
@@ -114,7 +86,8 @@ namespace WebUI.Controllers
                 return View(contact);
             }
 
-            _contactDAO.UpdateContact(ToDto(contact));
+            var contactDTO = _mapper.Map<ContactDTO>(contact);
+            _contactDAO.UpdateContact(contactDTO);
 
             return RedirectToAction(nameof(Index));
         }
@@ -127,7 +100,7 @@ namespace WebUI.Controllers
                 return NotFound();
             }
 
-            return View(ToModel(contactDTO));
+            return View(_mapper.Map<ContactViewModel>(contactDTO));
         }
 
         [HttpPost]
