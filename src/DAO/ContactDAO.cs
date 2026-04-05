@@ -4,7 +4,10 @@ using DTO;
 
 namespace DAO;
 
-public class ContactDAO
+
+
+
+public class ContactDAO : IContactDAO
 {
     private const string DatabaseName = "Contact_Book";
     protected string DatabaseIdentifier => $"`{DatabaseName}`";
@@ -16,7 +19,7 @@ public class ContactDAO
 
     private string DatabaseConnectionString => $"{_serverConnectionString};Database={DatabaseName};";
 
-    public MySqlConnection Connection => new(DatabaseConnectionString);
+    private MySqlConnection Connection => new(DatabaseConnectionString);
 
     public ContactDAO()
     {

@@ -15,7 +15,7 @@ namespace WebUI.Controllers
     //[Route("[controller]")]
     public class ContactController : Controller
     {
-        private readonly ContactDAO _contactDAO;
+        private readonly IContactDAO _contactDAO;
 
         private static ContactViewModel ToModel(ContactDTO contactDTO)
         {
@@ -62,11 +62,13 @@ namespace WebUI.Controllers
         // {
         //     _logger = logger;
         // }
-        public ContactController()
+       
+        
+        public ContactController(IContactDAO contactDAO)
         {
-            _contactDAO = new ContactDAO();
+            _contactDAO = contactDAO;
         }
-
+    
         public IActionResult Index()
         {
             var lstContactDTO = _contactDAO.GetAllContacts();
