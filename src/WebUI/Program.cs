@@ -15,6 +15,7 @@ builder.Services.AddControllersWithViews();
 var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<ContactDTO, ContactViewModel>().ReverseMap();
+    cfg.CreateMap<PhoneDTO, PhoneViewModel>().ReverseMap();
 }, NullLoggerFactory.Instance);
 
 IMapper mapper = config.CreateMapper();
