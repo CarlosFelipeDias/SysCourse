@@ -20,6 +20,7 @@ var config = new MapperConfiguration(cfg =>
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddTransient<IContactDAO, ContactDAO>();
+builder.Services.AddTransient<IPhoneDAO, PhoneDAO>();
 
 var app = builder.Build();
 
