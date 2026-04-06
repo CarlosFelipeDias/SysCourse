@@ -17,5 +17,6 @@
         <input asp-for="Email" class="form-control" readonly />
     </div>
 
+    <a asp-controller="Phone" asp-action="Create" asp-route-contactId="@Model.Id" class="btn btn-secondary mt-2">Add Phone Number</a>
     <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
 </div>

@@ -10,8 +10,8 @@ namespace WebUI.Models
         public int ContactId { get; set; }
 
         [Required(ErrorMessage = "The Phone Number field has to be filled.")]
-        [MinLength(8, ErrorMessage = "The Phone Number field must have at least 8 characters.")]
-        [MaxLength(20, ErrorMessage = "The Phone Number field must have at most 20 characters.")]
+        [MinLength(9, ErrorMessage = "The Phone Number field must have at least 9 characters.")]
+        [MaxLength(100, ErrorMessage = "The Phone Number field must have at most 100 characters.")]
         [DisplayName("Phone Number")]
         public string? PhoneNumber { get; set; }
     }

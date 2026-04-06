@@ -25,24 +25,38 @@ namespace WebUI.Controllers
         // }
 
         private readonly IPhoneDAO _phoneDAO;
-        private readonly IMapper _mapper;   
-        
+        private readonly IMapper _mapper;
+
         public PhoneController(IPhoneDAO phoneDAO, IMapper mapper)
         {
             _phoneDAO = phoneDAO;
             _mapper = mapper;
-        }   
-       
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult create(int contactId)
         {
-            return View("Error!");
+            var phoneViewModel = new PhoneViewModel { ContactId = contactId };
+            return View(phoneViewModel);
+
         }
+
+        [HttpPost]
+        public IActionResult create(PhoneViewModel phoneViewModel)
+        {
+            var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
+            _phoneDAO.CreatePhone(phoneDTO);
+            return RedirectToAction("Details", "Contact", new { id = phoneViewModel.ContactId });
+        }
+
+        // public IActionResult Index()
+        // {
+        //     return View();
+        // }
+
+        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        // public IActionResult Error()
+        // {
+        //     return View("Error!");
+        // }
     }
 }
