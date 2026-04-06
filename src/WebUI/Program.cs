@@ -1,5 +1,6 @@
 using AutoMapper;
 using DAO;
+using DAO.Interfaces;
 using DTO;
 using Microsoft.Extensions.Logging.Abstractions;
 using WebUI.Models;

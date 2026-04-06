@@ -1,10 +1,18 @@
 using Dapper;
+using MySqlConnector;
 using DTO;
+using DAO.Interfaces;
 
 namespace DAO;
 
+
+
+
 public class ContactDAO : BaseDAO, IContactDAO
-{
+{ 
+
+
+
     public void CreateContact(ContactDTO contact)
     {
         using var connection = Connection;
@@ -60,4 +68,8 @@ public class ContactDAO : BaseDAO, IContactDAO
                  WHERE Id = @Id;
             ", new { Id = id });
     }
+
+   
+
+
 }

@@ -1,6 +1,6 @@
 using DTO;
 
-namespace DAO;
+namespace DAO.Interfaces;
 public interface IContactDAO
 {
     void CreateContact(ContactDTO contact);
