@@ -6,6 +6,8 @@ using WebUI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DatabaseInitializer.EnsureCreated();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
