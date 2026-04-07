@@ -38,10 +38,17 @@ namespace WebUI.Controllers
             {
                 return View(contact);
             }
+            try
+            {
+                var contactDTO = _mapper.Map<ContactDTO>(contact);
+                _contactDAO.CreateContact(contactDTO);
+                TempData[Constants.Messages.SuccessMessage] = "Contact successfully created!";
+            }
+            catch (Exception ex)
+            {
 
-            var contactDTO = _mapper.Map<ContactDTO>(contact);
-            _contactDAO.CreateContact(contactDTO);
-
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to create the contact. Please try again later. {ex.Message}";
+            }
             return RedirectToAction(nameof(Index));
         }
         // private readonly ILogger<ContactController> _logger;
@@ -99,9 +106,19 @@ namespace WebUI.Controllers
             {
                 return View(contact);
             }
+            
 
-            var contactDTO = _mapper.Map<ContactDTO>(contact);
-            _contactDAO.UpdateContact(contactDTO);
+            try
+            {
+                var contactDTO = _mapper.Map<ContactDTO>(contact);
+                _contactDAO.UpdateContact(contactDTO);
+                TempData[Constants.Messages.SuccessMessage] = "Contact successfully updated!";
+            }
+            catch (Exception ex)
+            {
+
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to update the contact. Please try again later. {ex.Message}";
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -120,20 +137,18 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult Delete(ContactViewModel contact)
         {
-          
 
-          
             try
             {
-                  _contactDAO.DeleteContact(contact.Id);
-                  TempData["SuccessMessage"] = "Contact successfully deleted!";
+                _contactDAO.DeleteContact(contact.Id);
+                TempData[Constants.Messages.SuccessMessage] = "Contact successfully deleted!";
             }
             catch (Exception ex)
             {
 
-                TempData["ErrorMessage"] = $"An error occurred while trying to delete the contact. Please try again later. {ex.Message  }"; 
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to delete the contact. Please try again later. {ex.Message}";
             }
-              return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
 
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

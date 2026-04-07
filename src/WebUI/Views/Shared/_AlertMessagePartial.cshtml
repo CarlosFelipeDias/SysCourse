@@ -1,0 +1,12 @@
+@if (TempData[Constants.Messages.SuccessMessage] is string successMessage)
+{
+    <div class="alert alert-success">
+        @successMessage
+    </div>
+}
+@if (TempData[Constants.Messages.ErrorMessage] is string errorMessage)
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}  
