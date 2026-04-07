@@ -9,7 +9,7 @@ namespace WebUI.Models
 {
     public class ContactViewModel
     {
-
+        public List<PhoneViewModel> PhonesList { get; set; } = new();
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The Name field has to be filled.")]

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using AutoMapper;
-using DAO.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models;
 using DAO;
 using DTO;
+using DAO.Interfaces;
+using WebUI.Helpers;
 
 namespace WebUI.Controllers
 {
@@ -14,10 +15,21 @@ namespace WebUI.Controllers
         private readonly IContactDAO _contactDAO;
         private readonly IMapper _mapper;
 
+        private readonly IPhoneDAO _phoneDAO;
+
+        public ContactController(IContactDAO contactDAO, IMapper mapper, IPhoneDAO phoneDAO)
+        {
+            _contactDAO = contactDAO;
+            _mapper = mapper;
+            _phoneDAO = phoneDAO;
+        }
+
+
         public IActionResult Create()
         {
-                      return View();
+            return View();
         }
+
 
         [HttpPost]
         public IActionResult Create(ContactViewModel contact)
@@ -38,14 +50,8 @@ namespace WebUI.Controllers
         // {
         //     _logger = logger;
         // }
-       
-        
-        public ContactController(IContactDAO contactDAO, IMapper mapper)
-        {
-            _contactDAO = contactDAO;
-            _mapper = mapper;
-        }
-    
+
+
         public IActionResult Index()
         {
             var lstContactDTO = _contactDAO.GetAllContacts();
@@ -63,13 +69,20 @@ namespace WebUI.Controllers
             }
 
             var contact = _mapper.Map<ContactViewModel>(contactDTO);
+            var phoneDTOList = _phoneDAO.GetPhonesByContactId(id);
+            var phoneList = _mapper.Map<List<PhoneViewModel>>(phoneDTOList);
+            foreach (var phone in phoneList)
+            {
+                phone.PhoneNumber = PhoneNumberHelper.Format(phone.PhoneNumber);
+            }
+            contact.PhonesList?.AddRange(phoneList);
 
             return View(contact);
         }
 
         public IActionResult Edit(int id)
         {
-            
+
             var contactDTO = _contactDAO.GetContactById(id);
             if (contactDTO is null)
             {

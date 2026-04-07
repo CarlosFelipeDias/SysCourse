@@ -1,22 +1,78 @@
 @model WebUI.Models.ContactViewModel
 
-<div>
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <div class="mb-4">
+                <h2 class="mb-1">Contact Details</h2>
+                <p class="text-muted mb-0">View contact information and registered phone numbers.</p>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" readonly />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Surname" class="form-label fw-semibold"></label>
+                    <input asp-for="Surname" class="form-control" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Surname"></label>
-        <input asp-for="Surname" class="form-control" readonly />
+    <div class="d-flex flex-wrap gap-2 mt-4 mb-4 ps-3">
+        <a asp-controller="Phone" asp-action="Create" asp-route-contactId="@Model.Id" class="btn btn-success d-inline-flex align-items-center justify-content-center px-4" style="min-width: 190px;">
+            Add Phone Number
+        </a>
+        <a asp-action="Index" class="btn d-inline-flex align-items-center justify-content-center px-4 text-primary bg-primary-subtle border border-primary-subtle" style="min-width: 190px;">
+            <span class="me-2">&#8617;</span>Back
+        </a>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" readonly />
-    </div>
+    <div class="card shadow-sm border-0 mt-4">
+        <div class="card-body p-4">
+            <h4 class="mb-3">Phone Numbers</h4>
 
-    <a asp-controller="Phone" asp-action="Create" asp-route-contactId="@Model.Id" class="btn btn-secondary mt-2">Add Phone Number</a>
-    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+            @if (Model.PhonesList.Count == 0)
+            {
+                <p class="text-muted mb-0">No phone numbers registered yet.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Phone Number</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var phone in Model.PhonesList)
+                            {
+                                <tr>
+                                    <td>@phone.PhoneNumber</td>
+                                    <td class="text-end">
+                                        <a asp-controller="Phone" asp-action="Edit" asp-route-id="@phone.Id" asp-route-contactId="@Model.Id" class="btn btn-outline-primary btn-sm">
+                                            Edit
+                                        </a>
+                                        <a asp-controller="Phone" asp-action="Delete" asp-route-id="@phone.Id" asp-route-contactId="@Model.Id" class="btn btn-outline-danger btn-sm">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
 </div>

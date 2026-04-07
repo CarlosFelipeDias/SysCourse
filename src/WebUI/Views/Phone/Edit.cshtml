@@ -1,8 +1,9 @@
 @model WebUI.Models.PhoneViewModel
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
 
+    <input asp-for="Id" type="hidden" />
     <input asp-for="ContactId" type="hidden" />
 
     <div class="form-group">

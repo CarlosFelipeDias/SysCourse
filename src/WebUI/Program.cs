@@ -1,9 +1,5 @@
-using AutoMapper;
 using DAO;
-using DAO.Interfaces;
-using DTO;
-using Microsoft.Extensions.Logging.Abstractions;
-using WebUI.Models;
+using WebUI.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +8,8 @@ DatabaseInitializer.EnsureCreated();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var config = new MapperConfiguration(cfg =>
-{
-    cfg.CreateMap<ContactDTO, ContactViewModel>().ReverseMap();
-    cfg.CreateMap<PhoneDTO, PhoneViewModel>().ReverseMap();
-}, NullLoggerFactory.Instance);
-
-IMapper mapper = config.CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddTransient<IContactDAO, ContactDAO>();
-builder.Services.AddTransient<IPhoneDAO, PhoneDAO>();
+builder.Services.ConfigureAutoMapper();
+builder.Services.ConfigureDependencyInjectionServices();
 
 var app = builder.Build();
 

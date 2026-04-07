@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using AutoMapper;
-using WebUI.Models;
-using DAO;
-using DTO;
 using DAO.Interfaces;
+using DTO;
+using Microsoft.AspNetCore.Mvc;
+using WebUI.Helpers;
+using WebUI.Models;
 
 namespace WebUI.Controllers
 {
@@ -33,7 +26,7 @@ namespace WebUI.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult create(int contactId)
+        public IActionResult Create(int contactId)
         {
             var phoneViewModel = new PhoneViewModel { ContactId = contactId };
             return View(phoneViewModel);
@@ -41,13 +34,51 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult create(PhoneViewModel phoneViewModel)
+        public IActionResult Create(PhoneViewModel phoneViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(phoneViewModel);
+            }
+
+            phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
             var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
             _phoneDAO.CreatePhone(phoneDTO);
             return RedirectToAction("Details", "Contact", new { id = phoneViewModel.ContactId });
         }
 
+        public IActionResult Edit(int id, int contactId)
+        {
+            var phoneDTO = _phoneDAO.GetPhoneById(id);
+            if (phoneDTO is null || phoneDTO.ContactId != contactId)
+            {
+                return NotFound();
+            }
+
+            var phoneViewModel = _mapper.Map<PhoneViewModel>(phoneDTO);
+            phoneViewModel.PhoneNumber = PhoneNumberHelper.Format(phoneViewModel.PhoneNumber);
+            return View(phoneViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(PhoneViewModel phoneViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(phoneViewModel);
+            }
+
+            phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
+            var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
+            _phoneDAO.UpdatePhone(phoneDTO);
+            return RedirectToAction("Details", "Contact", new { id = phoneViewModel.ContactId });
+        }
+
+        public IActionResult Delete(int id, int contactId)
+        {
+            _phoneDAO.DeletePhone(id);
+            return RedirectToAction("Details", "Contact", new { id = contactId });
+        }
         // public IActionResult Index()
         // {
         //     return View();
