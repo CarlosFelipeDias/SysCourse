@@ -120,9 +120,20 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult Delete(ContactViewModel contact)
         {
-            _contactDAO.DeleteContact(contact.Id);
+          
 
-            return RedirectToAction(nameof(Index));
+          
+            try
+            {
+                  _contactDAO.DeleteContact(contact.Id);
+                  TempData["SuccessMessage"] = "Contact successfully deleted!";
+            }
+            catch (Exception ex)
+            {
+
+                TempData["ErrorMessage"] = $"An error occurred while trying to delete the contact. Please try again later. {ex.Message  }"; 
+            }
+              return RedirectToAction(nameof(Index));
         }
 
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
