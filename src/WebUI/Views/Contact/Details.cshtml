@@ -1,7 +1,7 @@
 @model WebUI.Models.ContactViewModel
 
-<partial name="_AlertMessagePartial" /> 
-
+@* <partial name="_AlertMessagePartial" />  *@
+@await Html.PartialAsync("_AlertMessagePartial")
 
 <div class="container py-4">
     <div class="card shadow-sm border-0">

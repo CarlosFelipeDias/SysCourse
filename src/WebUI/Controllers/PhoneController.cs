@@ -40,10 +40,19 @@ namespace WebUI.Controllers
             {
                 return View(phoneViewModel);
             }
+            try
+            {
+                phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
+                var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
+                _phoneDAO.CreatePhone(phoneDTO);
+                TempData[Constants.Messages.SuccessMessage] = "Phone number successfully created!";
+            }
+            catch (Exception ex)
+            {
 
-            phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
-            var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
-            _phoneDAO.CreatePhone(phoneDTO);
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to create the phone number. Please try again later. {ex.Message}";
+            }
+
             return RedirectToAction("Details", "Contact", new { id = phoneViewModel.ContactId });
         }
 
@@ -68,15 +77,32 @@ namespace WebUI.Controllers
                 return View(phoneViewModel);
             }
 
-            phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
-            var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
-            _phoneDAO.UpdatePhone(phoneDTO);
+            try
+            {
+                phoneViewModel.PhoneNumber = PhoneNumberHelper.Normalize(phoneViewModel.PhoneNumber);
+                var phoneDTO = _mapper.Map<PhoneDTO>(phoneViewModel);
+                _phoneDAO.UpdatePhone(phoneDTO);
+                TempData[Constants.Messages.SuccessMessage] = "Phone number successfully updated!";
+            }
+            catch (Exception ex)
+            {
+
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to update the phone number. Please try again later. {ex.Message}";
+            }
             return RedirectToAction("Details", "Contact", new { id = phoneViewModel.ContactId });
         }
 
         public IActionResult Delete(int id, int contactId)
         {
-            _phoneDAO.DeletePhone(id);
+            try
+            {
+                _phoneDAO.DeletePhone(id);
+                TempData[Constants.Messages.SuccessMessage] = "Phone number successfully deleted!";
+            }
+            catch (Exception ex)
+            {
+                TempData[Constants.Messages.ErrorMessage] = $"An error occurred while trying to delete the phone number. Please try again later. {ex.Message}";
+            }
             return RedirectToAction("Details", "Contact", new { id = contactId });
         }
         // public IActionResult Index()
