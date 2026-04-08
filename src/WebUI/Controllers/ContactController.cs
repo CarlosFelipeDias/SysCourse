@@ -131,7 +131,16 @@ namespace WebUI.Controllers
                 return NotFound();
             }
 
-            return View(_mapper.Map<ContactViewModel>(contactDTO));
+            var contact = _mapper.Map<ContactViewModel>(contactDTO);
+            var phoneDTOList = _phoneDAO.GetPhonesByContactId(id);
+            var phoneList = _mapper.Map<List<PhoneViewModel>>(phoneDTOList);
+            foreach (var phone in phoneList)
+            {
+                phone.PhoneNumber = PhoneNumberHelper.Format(phone.PhoneNumber);
+            }
+
+            contact.PhonesList.AddRange(phoneList);
+            return View(contact);
         }
 
         [HttpPost]
