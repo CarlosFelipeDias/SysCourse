@@ -3,13 +3,15 @@ using WebUI.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseStaticWebAssets();
+
 DatabaseInitializer.EnsureCreated();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureAutoMapper();
-builder.Services.ConfigureDependencyInjectionServices();
+builder.Services.ConfigureDependencyInjectionServices(builder.Environment);
 
 var app = builder.Build();
 
@@ -19,9 +21,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
