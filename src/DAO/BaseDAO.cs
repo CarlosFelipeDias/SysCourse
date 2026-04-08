@@ -4,7 +4,7 @@ namespace DAO
 {
     public class BaseDAO
     {
-        protected string DatabaseName => DatabaseEnvironment.GetDatabaseName();
+        protected string DatabaseName => DatabaseSettings.DatabaseName;
         protected string DatabaseIdentifier => $"`{DatabaseName}`";
 
         protected readonly string _serverConnectionString =

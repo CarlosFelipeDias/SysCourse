@@ -3,9 +3,17 @@ using WebUI.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseStaticWebAssets();
+var useStaticWebAssets = builder.Configuration.GetValue<bool>("ApplicationBehavior:UseStaticWebAssets");
+var useExceptionHandler = builder.Configuration.GetValue<bool>("ApplicationBehavior:UseExceptionHandler");
+var useHsts = builder.Configuration.GetValue<bool>("ApplicationBehavior:UseHsts");
+var useHttpsRedirection = builder.Configuration.GetValue<bool>("ApplicationBehavior:UseHttpsRedirection");
 
-DatabaseInitializer.EnsureCreated();
+if (useStaticWebAssets)
+{
+    builder.WebHost.UseStaticWebAssets();
+}
+
+builder.ConfigureDatabase();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -16,11 +24,19 @@ builder.Services.ConfigureDependencyInjectionServices(builder.Environment);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (useExceptionHandler)
 {
     app.UseExceptionHandler("/Home/Error");
+}
+
+if (useHsts)
+{
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+if (useHttpsRedirection)
+{
     app.UseHttpsRedirection();
 }
 

@@ -8,7 +8,7 @@ public static class DatabaseInitializer
 {
     public static void EnsureCreated()
     {
-        var databaseName = DatabaseEnvironment.GetDatabaseName();
+        var databaseName = DatabaseSettings.DatabaseName;
         var databaseIdentifier = $"`{databaseName}`";
 
         var serverConnectionString =
